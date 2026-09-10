@@ -505,7 +505,339 @@ textarea{
   font-weight:800;
   cursor:pointer;
 }
+/* ==============================
+   PRECIOS SEGÚN DÍA
+============================== */
 
+const promocionesSemana = [
+
+  /* DOMINGO */
+
+  {
+    dia:"Domingo",
+
+    servicio:
+    "Soporte prioritario",
+
+    descripcion:
+    "Atención para solicitudes prioritarias y diagnósticos programados.",
+
+    descuento:
+    "Cotización especial",
+
+    ejemplo:
+    "Consulta disponibilidad antes de solicitar.",
+
+    mensaje:
+    "Hola, quiero consultar la tarifa especial del domingo."
+  },
+
+
+  /* LUNES */
+
+  {
+    dia:"Lunes",
+
+    servicio:
+    "Mantenimiento de computadores",
+
+    descripcion:
+    "Comienza la semana optimizando tus equipos con mantenimiento preventivo.",
+
+    descuento:
+    "10% OFF",
+
+    ejemplo:
+    "Ejemplo: servicio de $120.000 → $108.000 COP",
+
+    mensaje:
+    "Hola, quiero solicitar la promoción del lunes en mantenimiento de computadores."
+  },
+
+
+  /* MARTES */
+
+  {
+    dia:"Martes",
+
+    servicio:
+    "Redes y WiFi",
+
+    descripcion:
+    "Beneficio especial para diagnóstico, configuración y optimización de redes.",
+
+    descuento:
+    "10% OFF",
+
+    ejemplo:
+    "Aplica sobre servicios seleccionados de redes.",
+
+    mensaje:
+    "Hola, quiero solicitar la promoción del martes en redes y WiFi."
+  },
+
+
+  /* MIÉRCOLES */
+
+  {
+    dia:"Miércoles",
+
+    servicio:
+    "Ciberseguridad",
+
+    descripcion:
+    "Protege tus equipos y cuentas con nuestros servicios de diagnóstico de seguridad.",
+
+    descuento:
+    "15% OFF",
+
+    ejemplo:
+    "Ejemplo: diagnóstico de $150.000 → $127.500 COP",
+
+    mensaje:
+    "Hola, quiero solicitar la promoción del miércoles en ciberseguridad."
+  },
+
+
+  /* JUEVES */
+
+  {
+    dia:"Jueves",
+
+    servicio:
+    "Consultoría tecnológica",
+
+    descripcion:
+    "Recibe asesoría profesional para mejorar la tecnología de tu negocio.",
+
+    descuento:
+    "10% OFF",
+
+    ejemplo:
+    "Ejemplo: asesoría de $95.000 → $85.500 COP",
+
+    mensaje:
+    "Hola, quiero solicitar la promoción del jueves en consultoría tecnológica."
+  },
+
+
+  /* VIERNES */
+
+  {
+    dia:"Viernes",
+
+    servicio:
+    "Plan empresarial",
+
+    descripcion:
+    "Beneficio especial para empresas que requieren varias soluciones tecnológicas.",
+
+    descuento:
+    "15% OFF",
+
+    ejemplo:
+    "Descuento sujeto al alcance del proyecto.",
+
+    mensaje:
+    "Hola, quiero consultar la promoción empresarial del viernes."
+  },
+
+
+  /* SÁBADO */
+
+  {
+    dia:"Sábado",
+
+    servicio:
+    "Mantenimiento y soporte",
+
+    descripcion:
+    "Tarifa especial para mantenimiento preventivo y soporte técnico programado.",
+
+    descuento:
+    "10% OFF",
+
+    ejemplo:
+    "Consulta disponibilidad para atención el sábado.",
+
+    mensaje:
+    "Hola, quiero solicitar la promoción del sábado."
+  }
+
+];
+
+
+const todayOffer =
+document.getElementById(
+  "todayOffer"
+);
+
+const todayTitle =
+document.getElementById(
+  "todayTitle"
+);
+
+const todayDescription =
+document.getElementById(
+  "todayDescription"
+);
+
+const todayDiscount =
+document.getElementById(
+  "todayDiscount"
+);
+
+const todayExample =
+document.getElementById(
+  "todayExample"
+);
+
+const todayWhatsapp =
+document.getElementById(
+  "todayWhatsapp"
+);
+
+const weekGrid =
+document.getElementById(
+  "weekGrid"
+);
+
+
+/* ==============================
+   OBTENER DÍA ACTUAL
+============================== */
+
+const fechaActual =
+new Date();
+
+const numeroDia =
+fechaActual.getDay();
+
+const promocionActual =
+promocionesSemana[numeroDia];
+
+
+/* ==============================
+   MOSTRAR PROMOCIÓN ACTUAL
+============================== */
+
+todayTitle.textContent =
+promocionActual.dia +
+" · " +
+promocionActual.servicio;
+
+
+todayDescription.textContent =
+promocionActual.descripcion;
+
+
+todayDiscount.textContent =
+promocionActual.descuento;
+
+
+todayExample.textContent =
+promocionActual.ejemplo;
+
+
+/* ==============================
+   WHATSAPP PROMOCIÓN ACTUAL
+============================== */
+
+todayWhatsapp.addEventListener(
+"click",
+function(){
+
+  const mensaje =
+  promocionActual.mensaje;
+
+  const url =
+  "https://wa.me/573148202126?text=" +
+  encodeURIComponent(mensaje);
+
+  window.open(
+    url,
+    "_blank"
+  );
+
+});
+
+
+/* ==============================
+   CREAR TARJETAS DE LA SEMANA
+============================== */
+
+weekGrid.innerHTML =
+promocionesSemana
+.map((promo,index)=>{
+
+  const activo =
+  index === numeroDia
+  ? "active"
+  : "";
+
+  return `
+
+  <article
+  class="day-card ${activo}">
+
+    <div class="day-name">
+      ${promo.dia}
+    </div>
+
+    <h4>
+      ${promo.servicio}
+    </h4>
+
+    <p>
+      ${promo.descripcion}
+    </p>
+
+    <div class="day-discount">
+      ${promo.descuento}
+    </div>
+
+    <div class="day-price-example">
+      ${promo.ejemplo}
+    </div>
+
+    <button
+    class="day-button"
+    onclick="solicitarPromoDia(${index})">
+
+      Solicitar promoción →
+
+    </button>
+
+  </article>
+
+  `;
+
+})
+.join("");
+
+
+/* ==============================
+   SOLICITAR PROMO ESPECÍFICA
+============================== */
+
+function solicitarPromoDia(index){
+
+  const promocion =
+  promocionesSemana[index];
+
+  const mensaje =
+  promocion.mensaje;
+
+  const url =
+  "https://wa.me/573148202126?text=" +
+  encodeURIComponent(mensaje);
+
+  window.open(
+    url,
+    "_blank"
+  );
+
+}
 
 /* =========================
    SOLICITUD DE SERVICIO
